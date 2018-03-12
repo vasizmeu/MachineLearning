@@ -18,7 +18,7 @@ class ViewController: UIViewController {
     private let imagePickerController = UIImagePickerController()
     fileprivate let sentimentAnalysisService = SentimentAnalysisService()
     fileprivate var currentSentiment = Sentiment.neutral
-    private var faceRectangles = [UIView]()
+    private var faceRectangles = [UIImageView]()
     
     //MARK: - Life Cycle methods
     
@@ -137,6 +137,13 @@ class ViewController: UIViewController {
         }
         faceRectangles = []
     }
+    
+    fileprivate func updateFaceViews() {
+        let currentEmoji = UIImage(named: currentSentiment.imageName)
+        for faceView in faceRectangles {
+            faceView.image = currentEmoji
+        }
+    }
 }
 
 //MARK: - UITextViewDelegate Methods
@@ -150,6 +157,7 @@ extension ViewController: UITextViewDelegate {
         
         if text.last == " " {
             currentSentiment = sentimentAnalysisService.predictSentiment(from: text)
+            updateFaceViews()
         }
     }
 }
